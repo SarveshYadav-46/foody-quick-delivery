@@ -1,0 +1,278 @@
+import React, { useState } from "react";
+import "./RestaurantMenu.css";
+
+const menuItems = [
+  {
+    id: 1,
+    name: "Masala Dosa",
+    category: "VEG",
+    description:
+      "Crispy dosa served with spicy potato masala, sambar and coconut chutney.",
+    price: 140,
+    image:
+      "https://images.unsplash.com/photo-1630383249896-424e482df921?w=500&q=80",
+  },
+  {
+    id: 2,
+    name: "Uttapam",
+    category: "VEG",
+    description:
+      "Thick pancake made from dosa batter topped with mixed vegetables.",
+    price: 130,
+    image:
+      "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=500&q=80",
+  },
+  {
+    id: 3,
+    name: "Hyderabadi Chicken Biryani",
+    category: "NON-VEG",
+    description:
+      "Aromatic basmati rice cooked with tender chicken pieces, herbs and spices.",
+    price: 320,
+    image:
+      "https://images.unsplash.com/photo-1563376782-8f8f9f8e4e3?w=500&q=80",
+  },
+  {
+    id: 4,
+    name: "Paneer Butter Masala",
+    category: "VEG",
+    description:
+      "Soft paneer cooked in a rich, creamy tomato and butter gravy.",
+    price: 220,
+    image:
+      "https://images.unsplash.com/photo-1631452180519-c014fe946bc7?w=500&q=80",
+  },
+  {
+    id: 5,
+    name: "Butter Chicken",
+    category: "NON-VEG",
+    description:
+      "Tender chicken cooked in a creamy tomato-based buttery gravy.",
+    price: 280,
+    image:
+      "https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?w=500&q=80",
+  },
+  {
+    id: 6,
+    name: "Chole Bhature",
+    category: "VEG",
+    description:
+      "Spicy chickpea curry served with fluffy deep-fried bhature.",
+    price: 160,
+    image:
+      "https://images.unsplash.com/photo-1626132647523-66f5bf380027?w=500&q=80",
+  },
+  {
+    id: 7,
+    name: "Veg Fried Rice",
+    category: "VEG",
+    description:
+      "Fried basmati rice tossed with fresh vegetables and aromatic spices.",
+    price: 180,
+    image:
+      "https://images.unsplash.com/photo-1603133872878-684f208fb84b?w=500&q=80",
+  },
+  {
+    id: 8,
+    name: "Chicken Tikka",
+    category: "NON-VEG",
+    description:
+      "Juicy chicken pieces marinated with spices and grilled to perfection.",
+    price: 260,
+    image:
+      "https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?w=500&q=80",
+  },
+  {
+    id: 9,
+    name: "Veg Manchurian",
+    category: "VEG",
+    description:
+      "Crispy vegetable balls tossed in a spicy Indo-Chinese sauce.",
+    price: 190,
+    image:
+      "https://images.unsplash.com/photo-1625398407796-82650a8c0c4f?w=500&q=80",
+  },
+  {
+    id: 10,
+    name: "Mutton Biryani",
+    category: "NON-VEG",
+    description:
+      "Fragrant basmati rice cooked with tender mutton and traditional spices.",
+    price: 380,
+    image:
+      "https://images.unsplash.com/photo-1563379091339-03246963d51a?w=500&q=80",
+  },
+  {
+    id: 11,
+    name: "Garlic Naan",
+    category: "VEG",
+    description:
+      "Soft Indian bread topped with garlic, coriander and butter.",
+    price: 70,
+    image:
+      "https://images.unsplash.com/photo-1601050690597-df0568f70950?w=500&q=80",
+  },
+  {
+    id: 12,
+    name: "Gulab Jamun",
+    category: "VEG",
+    description:
+      "Soft milk-solid dumplings soaked in sweet sugar syrup.",
+    price: 90,
+    image:
+      "https://images.unsplash.com/photo-1666190094766-7f3b9d5f6f5c?w=500&q=80",
+  },
+];
+
+function RestaurantMenu() {
+  const [cart, setCart] = useState([]);
+
+  const addToCart = (item) => {
+    setCart((prevCart) => {
+      const existingItem = prevCart.find(
+        (cartItem) => cartItem.id === item.id
+      );
+
+      if (existingItem) {
+        return prevCart.map((cartItem) =>
+          cartItem.id === item.id
+            ? { ...cartItem, quantity: cartItem.quantity + 1 }
+            : cartItem
+        );
+      }
+
+      return [...prevCart, { ...item, quantity: 1 }];
+    });
+  };
+
+  const removeFromCart = (id) => {
+    setCart((prevCart) =>
+      prevCart
+        .map((item) =>
+          item.id === id
+            ? { ...item, quantity: item.quantity - 1 }
+            : item
+        )
+        .filter((item) => item.quantity > 0)
+    );
+  };
+
+  const totalItems = cart.reduce(
+    (total, item) => total + item.quantity,
+    0
+  );
+
+  const totalPrice = cart.reduce(
+    (total, item) => total + item.price * item.quantity,
+    0
+  );
+
+  return (
+    <div className="restaurant-page">
+
+      {/* Header */}
+      <div className="restaurant-header">
+        <div>
+          <h1>Spice Garden Restaurant</h1>
+          <p>North Indian • South Indian • Biryani</p>
+          <span>⭐ 4.5 • 30-40 mins • ₹200 for two</span>
+        </div>
+
+        <div className="cart-box">
+          🛒 Cart
+          <strong>{totalItems}</strong>
+        </div>
+      </div>
+
+      {/* Menu */}
+      <div className="menu-container">
+        <h2>Popular Menu</h2>
+
+        <div className="menu-grid">
+          {menuItems.map((item) => (
+            <div className="food-card" key={item.id}>
+
+              <img
+                src={item.image}
+                alt={item.name}
+                className="food-image"
+              />
+
+              <div className="food-content">
+
+                <span
+                  className={
+                    item.category === "VEG"
+                      ? "veg"
+                      : "nonveg"
+                  }
+                >
+                  ● {item.category}
+                </span>
+
+                <h3>{item.name}</h3>
+
+                <p>{item.description}</p>
+
+                <div className="food-bottom">
+                  <strong>₹{item.price}</strong>
+
+                  <button onClick={() => addToCart(item)}>
+                    Add to Cart
+                  </button>
+                </div>
+
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Cart */}
+      {cart.length > 0 && (
+        <div className="cart-section">
+
+          <h2>Your Cart</h2>
+
+          {cart.map((item) => (
+            <div className="cart-item" key={item.id}>
+
+              <div>
+                <strong>{item.name}</strong>
+                <p>
+                  ₹{item.price} × {item.quantity}
+                </p>
+              </div>
+
+              <div className="quantity-control">
+                <button onClick={() => removeFromCart(item.id)}>
+                  −
+                </button>
+
+                <span>{item.quantity}</span>
+
+                <button onClick={() => addToCart(item)}>
+                  +
+                </button>
+              </div>
+
+            </div>
+          ))}
+
+          <div className="cart-total">
+            <h3>Total</h3>
+            <strong>₹{totalPrice}</strong>
+          </div>
+
+          <button className="checkout-btn">
+            Proceed to Checkout
+          </button>
+
+        </div>
+      )}
+
+    </div>
+  );
+}
+
+export default RestaurantMenu;
